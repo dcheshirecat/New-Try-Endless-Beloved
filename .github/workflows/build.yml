@@ -1,0 +1,64 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+    container:
+      image: barichello/godot-ci:4.2.2
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup export templates
+        run: |
+          mkdir -p ~/.local/share/godot/export_templates/4.2.2.stable
+          mv /root/.local/share/godot/export_templates/4.2.2.stable \
+             ~/.local/share/godot/export_templates/4.2.2.stable
+
+      - name: Generate debug keystore
+        run: |
+          keytool -genkey -v \
+            -keystore /root/debug.keystore \
+            -alias androiddebugkey \
+            -keyalg RSA -keysize 2048 -validity 10000 \
+            -storepass android -keypass android \
+            -dname "CN=Android Debug,O=Android,C=US"
+
+      - name: Write Godot editor settings
+        run: |
+          mkdir -p ~/.config/godot
+          cat > ~/.config/godot/editor_settings-4.tres << 'EOF'
+[gd_resource type="EditorSettings" format=3]
+
+[resource]
+export/android/android_sdk_path = "/usr/lib/android-sdk"
+export/android/debug_keystore = "/root/debug.keystore"
+export/android/debug_keystore_user = "androiddebugkey"
+export/android/debug_keystore_pass = "android"
+EOF
+
+      - name: Import project
+        run: |
+          cd $GITHUB_WORKSPACE
+          godot --headless --import 2>&1 || true
+
+      - name: Create output directory
+        run: mkdir -p build
+
+      - name: Export APK
+        run: |
+          cd $GITHUB_WORKSPACE
+          godot --headless --export-debug "Android" build/EndlessBeloved.apk 2>&1
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: EndlessBeloved-APK
+          path: build/EndlessBeloved.apk
+          retention-days: 30
