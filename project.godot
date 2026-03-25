@@ -1,0 +1,38 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the format may change between versions.
+
+config_version=5
+
+[application]
+
+config/name="Endless, Beloved"
+config/description="A dark fantasy tarot visual novel"
+config/version="0.1.0"
+run/main_scene="res://main.tscn"
+config/features=PackedStringArray("4.2", "Mobile")
+
+[audio]
+
+buses/default_bus_layout="res://default_bus_layout.tres"
+
+[display]
+
+window/size/viewport_width=1080
+window/size/viewport_height=1920
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+window/handheld/orientation="portrait"
+
+[autoload]
+
+GameState="*res://GameState.gd"
+SceneManager="*res://SceneManager.gd"
+AudioManager="*res://AudioManager.gd"
+CardManager="*res://CardManager.gd"
+DialogueSystem="*res://DialogueSystem.gd"
+
+[rendering]
+
+textures/canvas_textures/default_texture_filter=2
+renderer/rendering_method="mobile"

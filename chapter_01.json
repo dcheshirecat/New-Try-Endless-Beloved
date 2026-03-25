@@ -1,0 +1,255 @@
+{
+  "prologue_01": {
+    "type": "line",
+    "speaker": "narrator",
+    "text": "There is no before. Only the moment you open your eyes.",
+    "portrait": "neutral",
+    "music": "liminal",
+    "next": "prologue_02"
+  },
+  "prologue_02": {
+    "type": "line",
+    "speaker": "narrator",
+    "text": "Stone beneath you. Cold, but not unpleasant. The smell of something burning — wax, and something older than wax.",
+    "next": "prologue_03"
+  },
+  "prologue_03": {
+    "type": "line",
+    "speaker": "narrator",
+    "text": "You are in a tower. You do not know how you know this. You simply do.",
+    "next": "prologue_04"
+  },
+  "prologue_04": {
+    "type": "line",
+    "speaker": "narrator",
+    "text": "In your hand — warm, impossibly warm for something made of paper — a deck of cards.",
+    "sfx": "card_shuffle",
+    "next": "prologue_05"
+  },
+  "prologue_05": {
+    "type": "line",
+    "speaker": "narrator",
+    "text": "You do not remember your name. But the cards do.",
+    "next": "prologue_name_prompt"
+  },
+  "prologue_name_prompt": {
+    "type": "end",
+    "next_scene": "character_setup"
+  },
+
+  "ch1_arrive_01": {
+    "type": "line",
+    "speaker": "narrator",
+    "text": "The tower has three hundred and three steps. You know this before you count them.",
+    "next": "ch1_arrive_02"
+  },
+  "ch1_arrive_02": {
+    "type": "line",
+    "speaker": "narrator",
+    "text": "At the top: a door. Behind the door: a voice.",
+    "next": "ch1_voice_01"
+  },
+  "ch1_voice_01": {
+    "type": "line",
+    "speaker": "oracle",
+    "portrait": "neutral",
+    "text": "I wondered when you'd arrive. You're later than I expected. Or earlier. Time is unreliable here.",
+    "next": "ch1_voice_02"
+  },
+  "ch1_voice_02": {
+    "type": "line",
+    "speaker": "oracle",
+    "portrait": "thoughtful",
+    "text": "Don't be alarmed. I'm not a threat. I'm merely... observant.",
+    "next": "ch1_player_choice_01"
+  },
+  "ch1_player_choice_01": {
+    "type": "choice",
+    "choices": [
+      {
+        "text": "Where am I?",
+        "next": "ch1_where_01",
+        "affinity": { "oracle": 0 }
+      },
+      {
+        "text": "Who are you?",
+        "next": "ch1_who_01",
+        "affinity": { "oracle": 3 }
+      },
+      {
+        "text": "How do you know I'd arrive?",
+        "next": "ch1_how_01",
+        "affinity": { "oracle": 5 }
+      },
+      {
+        "text": "Say nothing.",
+        "next": "ch1_silent_01",
+        "affinity": { "oracle": -2 }
+      }
+    ]
+  },
+  "ch1_where_01": {
+    "type": "line",
+    "speaker": "oracle",
+    "portrait": "neutral",
+    "text": "Between. That's the only honest answer I can give you right now.",
+    "next": "ch1_where_02"
+  },
+  "ch1_where_02": {
+    "type": "line",
+    "speaker": "oracle",
+    "portrait": "thoughtful",
+    "text": "Between what? Between everything you were and everything you might become.",
+    "next": "ch1_common_continue"
+  },
+  "ch1_who_01": {
+    "type": "line",
+    "speaker": "oracle",
+    "portrait": "neutral",
+    "text": "That's the right question. Most people ask where first.",
+    "next": "ch1_who_02"
+  },
+  "ch1_who_02": {
+    "type": "line",
+    "speaker": "oracle",
+    "portrait": "thoughtful",
+    "text": "I go by {oracle}. And I have been here... longer than I care to calculate.",
+    "next": "ch1_common_continue"
+  },
+  "ch1_how_01": {
+    "type": "line",
+    "speaker": "oracle",
+    "portrait": "surprised",
+    "text": "...",
+    "next": "ch1_how_02"
+  },
+  "ch1_how_02": {
+    "type": "line",
+    "speaker": "oracle",
+    "portrait": "thoughtful",
+    "text": "That's a better question than you know. The short answer: the cards told me.",
+    "next": "ch1_how_03"
+  },
+  "ch1_how_03": {
+    "type": "line",
+    "speaker": "oracle",
+    "portrait": "neutral",
+    "text": "The long answer... will take time we haven't yet decided to spend together.",
+    "next": "ch1_common_continue"
+  },
+  "ch1_silent_01": {
+    "type": "line",
+    "speaker": "oracle",
+    "portrait": "thoughtful",
+    "text": "Silent. Interesting. Most people are either afraid or curious in the first moments.",
+    "next": "ch1_silent_02"
+  },
+  "ch1_silent_02": {
+    "type": "line",
+    "speaker": "oracle",
+    "portrait": "neutral",
+    "text": "You're neither, apparently. I'll remember that.",
+    "next": "ch1_common_continue"
+  },
+  "ch1_common_continue": {
+    "type": "line",
+    "speaker": "oracle",
+    "portrait": "neutral",
+    "text": "The others are here too, somewhere in the tower. They're... less welcoming than I am. Fair warning.",
+    "next": "ch1_card_moment_01"
+  },
+  "ch1_card_moment_01": {
+    "type": "line",
+    "speaker": "narrator",
+    "text": "The deck shifts in your hand. One card pushes to the surface.",
+    "sfx": "card_draw",
+    "next": "ch1_first_draw"
+  },
+  "ch1_first_draw": {
+    "type": "card_draw",
+    "forced_card": "",
+    "next": "ch1_after_draw_branch"
+  },
+  "ch1_after_draw_branch": {
+    "type": "branch",
+    "branches": [
+      {
+        "condition": "flag:drew_fool",
+        "next": "ch1_drew_fool"
+      },
+      {
+        "condition": "flag:drew_magician",
+        "next": "ch1_drew_magician"
+      },
+      {
+        "condition": "flag:drew_judgement",
+        "next": "ch1_drew_judgement"
+      }
+    ],
+    "default": "ch1_drew_other"
+  },
+  "ch1_drew_fool": {
+    "type": "line",
+    "speaker": "oracle",
+    "portrait": "thoughtful",
+    "text": "The Fool. A beginning. But you already know that, don't you? You can feel it.",
+    "next": "ch1_oracle_exit"
+  },
+  "ch1_drew_magician": {
+    "type": "line",
+    "speaker": "oracle",
+    "portrait": "surprised",
+    "text": "...",
+    "next": "ch1_drew_magician_02"
+  },
+  "ch1_drew_magician_02": {
+    "type": "line",
+    "speaker": "oracle",
+    "portrait": "neutral",
+    "text": "Put it away. For now.",
+    "next": "ch1_oracle_exit"
+  },
+  "ch1_drew_judgement": {
+    "type": "flag",
+    "name": "judgement_drawn_early",
+    "value": true,
+    "next": "ch1_drew_judgement_02"
+  },
+  "ch1_drew_judgement_02": {
+    "type": "line",
+    "speaker": "oracle",
+    "portrait": "fearful",
+    "text": "Where did you — how did that — ",
+    "next": "ch1_drew_judgement_03"
+  },
+  "ch1_drew_judgement_03": {
+    "type": "line",
+    "speaker": "oracle",
+    "portrait": "neutral",
+    "text": "We should find the others. Quickly.",
+    "next": "ch1_oracle_exit"
+  },
+  "ch1_drew_other": {
+    "type": "line",
+    "speaker": "oracle",
+    "portrait": "thoughtful",
+    "text": "The cards are speaking already. They know you're here.",
+    "next": "ch1_oracle_exit"
+  },
+  "ch1_oracle_exit": {
+    "type": "line",
+    "speaker": "oracle",
+    "portrait": "neutral",
+    "text": "Come. The tower is large, but it remembers who's in it. We'll find them.",
+    "next": "ch1_end"
+  },
+  "ch1_end": {
+    "type": "affinity",
+    "changes": {},
+    "next": "ch1_end_scene"
+  },
+  "ch1_end_scene": {
+    "type": "end",
+    "next_scene": "liminal_tower"
+  }
+}
