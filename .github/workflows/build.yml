@@ -1,39 +1,51 @@
+
 name: Build Android APK
 
 on:
   push:
-    branches: [ main ]
-  workflow_dispatch:
+    branches:
+      - main
 
 jobs:
-  build-android:
+  build:
     runs-on: ubuntu-latest
-    container:
-      image: barichello/godot-ci:4.2.2
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      - name: Setup export templates
+      - name: Install dependencies
         run: |
+          sudo apt-get update
+          sudo apt-get install -y wget unzip openjdk-17-jdk
+
+      - name: Download Godot
+        run: |
+          wget https://downloads.tuxfamily.org/godotengine/4.2.2/Godot_v4.2.2-stable_linux.x86_64.zip
+          unzip Godot_v4.2.2-stable_linux.x86_64.zip
+          mv Godot_v4.2.2-stable_linux.x86_64 godot
+          chmod +x godot
+
+      - name: Download export templates
+        run: |
+          wget https://downloads.tuxfamily.org/godotengine/4.2.2/Godot_v4.2.2-stable_export_templates.tpz
           mkdir -p ~/.local/share/godot/export_templates/4.2.2.stable
-          mv /root/.local/share/godot/export_templates/4.2.2.stable \
-             ~/.local/share/godot/export_templates/4.2.2.stable
+          unzip Godot_v4.2.2-stable_export_templates.tpz -d templates
+          mv templates/templates/* ~/.local/share/godot/export_templates/4.2.2.stable/
 
-      - name: Generate debug keystore
+      - name: Install Android SDK
         run: |
-          keytool -genkey -v \
-            -keystore /root/debug.keystore \
-            -alias androiddebugkey \
-            -keyalg RSA -keysize 2048 -validity 10000 \
-            -storepass android -keypass android \
-            -dname "CN=Android Debug,O=Android,C=US"
+          sudo apt-get install -y android-sdk
+
+      - name: Set up Android SDK environment
+        run: |
+          echo "ANDROID_HOME=/usr/lib/android-sdk" >> $GITHUB_ENV
+          echo "ANDROID_SDK_ROOT=/usr/lib/android-sdk" >> $GITHUB_ENV
 
       - name: Write Godot editor settings
         run: |
           mkdir -p ~/.config/godot
-          cat > ~/.config/godot/editor_settings-4.tres << 'EOF'
+          cat > ~/.config/godot/editor_settings-4.tres <<'EOF'
 [gd_resource type="EditorSettings" format=3]
 
 [resource]
@@ -43,22 +55,12 @@ export/android/debug_keystore_user = "androiddebugkey"
 export/android/debug_keystore_pass = "android"
 EOF
 
-      - name: Import project
+      - name: Build APK
         run: |
-          cd $GITHUB_WORKSPACE
-          godot --headless --import 2>&1 || true
-
-      - name: Create output directory
-        run: mkdir -p build
-
-      - name: Export APK
-        run: |
-          cd $GITHUB_WORKSPACE
-          godot --headless --export-debug "Android" build/EndlessBeloved.apk 2>&1
+          ./godot --headless --export-release "Android" build.apk
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: EndlessBeloved-APK
-          path: build/EndlessBeloved.apk
-          retention-days: 30
+          name: android-apk
+          path: build.apk
